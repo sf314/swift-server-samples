@@ -32,4 +32,27 @@ final class AppTests: XCTestCase {
             XCTAssertEqual(res.status, .notFound)
         })
     }
+
+    func testMultiplePathParams() throws {
+        // Boilerplate setup
+        let app = Application(.testing)
+        defer { app.shutdown() }
+        try configure(app)
+
+        // Verify that multiple path params can be accepted
+        try app.test(.GET, "tests/residents/steve/pets/barky", afterResponse: { res in
+            XCTAssertEqual(res.status, .ok)
+            XCTAssertEqual(res.body.string, "steve's pet is barky!")
+        })
+
+        // First path param is required. Otherwise, 404
+        try app.test(.GET, "tests/residents//pets/barky", afterResponse: { res in
+            XCTAssertEqual(res.status, .notFound)
+        })
+
+        // Second path param is also required. Otherwise, 404
+        try app.test(.GET, "tests/residents/steve/pets/", afterResponse: { res in
+            XCTAssertEqual(res.status, .notFound)
+        })
+    }
 }
