@@ -29,4 +29,15 @@ func routes(_ app: Application) throws {
 
         return Response.init(status: HTTPResponseStatus.ok, body: Response.Body.init(string: "\(name)'s pet is \(pet)!"))
     }
+
+    app.group("tests", "queries") { queryGroup in
+        queryGroup.get("strings") { req -> Response in
+            // Note: type information cannot always be inferred, and it's not necessarily a string either!
+            // Note: dictionary lookups return optionals!
+            let name: String = req.query["name"] ?? "no-name"
+            let city: String = req.query["city"] ?? "no-city"
+
+            return Response.init(status: .ok, body: Response.Body.init(string: "Query params: name=\(name), city=\(city)"))
+        }
+    }
 }

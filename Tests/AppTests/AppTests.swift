@@ -55,4 +55,17 @@ final class AppTests: XCTestCase {
             XCTAssertEqual(res.status, .notFound)
         })
     }
+
+    func testStringQueryParams() throws {
+        // Boilerplate setup
+        let app = Application(.testing)
+        defer { app.shutdown() }
+        try configure(app)
+
+        // Two strings can be pulled from endpoint
+        try app.test(.GET, "/tests/queries/strings?name=Geoff&city=Paris", afterResponse: { res in
+            XCTAssertEqual(res.status, .ok)
+            XCTAssertEqual(res.body.string, "Query params: name=Geoff, city=Paris")
+        })
+    }
 }
