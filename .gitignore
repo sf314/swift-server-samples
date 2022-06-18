@@ -1,4 +1,6 @@
+# Default
 Packages
+Package.resolved
 .build
 xcuserdata
 *.xcodeproj
@@ -7,3 +9,6 @@ DerivedData/
 db.sqlite
 .swiftpm
 .env
+
+# Editor files
+.vscode
